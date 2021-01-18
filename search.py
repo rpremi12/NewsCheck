@@ -33,7 +33,14 @@ def search2(keyword):
 	return top_headlines
 
 
-def search3
+def search3(keyword, categ = 'business'):
+	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
+	top_headlines = newsapi.get_top_headlines(q=keyword,
+	                                       category= categ,
+                                          language='en',
+                                          country='us')
+
+	return top_headlines
 
 
 
