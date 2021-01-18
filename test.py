@@ -2,57 +2,43 @@ import unittest
 import time
 from search import *
 import inspect
+import sys 
 
+keyword = "COVID"
 
-def time_readout(name, time):
-	print(name,"| Elapsed time:", time)
+def time_readout(name, time , res):
+	print(name,"| Elapsed time:", time, "| # of Articles:", res)
 
 class TestSearchMethods(unittest.TestCase):
 
-
 	def test_top_search(self):
+		# get start time
 		start = time.time()
 
-		result= search("Tesla")
-		#print(result)
+		# Do Method operations
+		result= search(keyword)
+
+		# calculate duration 
+		dur = time.time()-start
+
+		# See if operation works
 		self.assertEqual(result['status'], 'ok')
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, result['totalResults'])
 
-		dur = time.time()-start
-		time_readout(inspect.stack()[0][0].f_code.co_name, dur)
-
-	'''
-	def test_upper(self):
+	def test_top_search2(self):
+		# get start time
 		start = time.time()
 
-		self.assertEqual('foo'.upper(), 'FOO')
+		# Do Method operations
+		result= search2(keyword)
 
+		# calculate duration 
 		dur = time.time()-start
-		time_readout(inspect.stack()[0][0].f_code.co_name, dur)
 
+		# See if operation works
+		self.assertEqual(result['status'], 'ok')
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, result['totalResults'])
 
-
-	def test_isupper(self):
-		start = time.time()
-
-		self.assertTrue('FOO'.isupper())
-		self.assertFalse('Foo'.isupper())
-
-		dur = time.time()-start
-		time_readout(inspect.stack()[0][0].f_code.co_name,  dur)
-
-
-	def test_split(self):
-		start = time.time()
-
-		s = 'hello world'
-		self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-		with self.assertRaises(TypeError):
-			s.split(2)
-
-		dur = time.time()-start
-		time_readout(inspect.stack()[0][0].f_code.co_name, dur)
-	'''
 
 if __name__ == '__main__':
 	unittest.main()

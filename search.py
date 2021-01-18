@@ -1,14 +1,40 @@
 from newsapi import NewsApiClient
 
-def search(keyword, from_par="!", to_par="!"):
+def search(keyword):
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
+	top_headlines = newsapi.get_top_headlines(q=keyword,
+	                                        # category='business',
+                                          language='en',
+                                          country='us')
+
+	return top_headlines
+
+def search2(keyword):
+
+	categories = ["entertainment", "general", "health" , "science" , "sports", "technology"]
+
+	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
+
+
 	top_headlines = newsapi.get_top_headlines(q=keyword,
 	                                         category='business',
                                           language='en',
                                           country='us')
 
-	#print(type(top_headlines))
+	for cat in categories:
+		temp = newsapi.get_top_headlines(q=keyword,
+	                                         category=cat,
+                                          language='en',
+                                          country='us')
+		if temp['totalResults'] >0 :
+			top_headlines["articles"].append(temp['articles'])
+			top_headlines['totalResults'] += temp['totalResults']
+
 	return top_headlines
+
+
+def search3
+
 
 
 
