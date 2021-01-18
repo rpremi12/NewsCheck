@@ -7,8 +7,10 @@ def search(keyword, from_par="!", to_par="!"):
                                           language='en',
                                           country='us')
 
-	print(type(top_headlines))
+	#print(type(top_headlines))
 	return top_headlines
+
+
 
 def main():
 
