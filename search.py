@@ -43,16 +43,16 @@ def search3(keyword, categ = 'business'):
 	return top_headlines
 
 
-def search4(keyword, categ = 'business'):
+def search4(keyword, categ = 'business', from_par = '2020-12-18', to_par ='2020-12-28'):
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
 	all_articles = newsapi.get_everything(q=keyword,
 	                                      #sources='bbc-news,the-verge',
 	                                      domains='bbc.co.uk,techcrunch.com',
-	                                      from_param='2020-12-18',
-	                                      to='2020-12-28',
+	                                      from_param=from_par,
+	                                      to=to_par,
 	                                      language='en',
 	                                      sort_by='relevancy',
-	                                      page=2)
+	                                      page=1)
 
 	return all_articles
 
