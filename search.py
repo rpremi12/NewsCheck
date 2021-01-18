@@ -1,31 +1,51 @@
 from newsapi import NewsApiClient
+from datetime import datetime, timedelta
 
-def search(keyword):
+
+def search(keyword, country = None):
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
-	top_headlines = newsapi.get_top_headlines(q=keyword,
+	top_headlines ={}
+	if country == None:
+		top_headlines = newsapi.get_top_headlines(q=keyword,
 	                                        # category='business',
-                                          language='en',
-                                          country='us')
+                                          language='en')
+	else:
+		top_headlines = newsapi.get_top_headlines(q=keyword,
+                                    # category='business',
+                                  language='en',
+                                  country=country)
 
 	return top_headlines
 
-def search2(keyword):
+def search2(keyword, country = None):
 
 	categories = ["entertainment", "general", "health" , "science" , "sports", "technology"]
 
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
 
+	top_headlines = {}
 
-	top_headlines = newsapi.get_top_headlines(q=keyword,
-	                                         category='business',
-                                          language='en',
-                                          country='us')
+	if country ==None:
+		top_headlines = newsapi.get_top_headlines(q=keyword,
+		                                         category='business',
+	                                          language='en')
+	else:
+		top_headlines = newsapi.get_top_headlines(q=keyword,
+		                                         category='business',
+	                                          language='en',
+	                                          country=country)
+	 		
 
 	for cat in categories:
-		temp = newsapi.get_top_headlines(q=keyword,
-	                                         category=cat,
-                                          language='en',
-                                          country='us')
+		if country ==None:
+			temp = newsapi.get_top_headlines(q=keyword,
+		                                         category=cat,
+	                                          language='en' )
+		else:
+			temp = newsapi.get_top_headlines(q=keyword,
+		                                         category=cat,
+	                                          language='en',
+	                                          country=country )
 		if temp['totalResults'] >0 :
 			top_headlines["articles"].append(temp['articles'])
 			top_headlines['totalResults'] += temp['totalResults']
@@ -33,21 +53,26 @@ def search2(keyword):
 	return top_headlines
 
 
-def search3(keyword, categ = 'business'):
+def search3(keyword, categ = 'business', country= None):
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
-	top_headlines = newsapi.get_top_headlines(q=keyword,
-	                                       category= categ,
-                                          language='en',
-                                          country='us')
+	if country ==None:
+		top_headlines = newsapi.get_top_headlines(q=keyword,
+		                                       category= categ,
+	                                          language='en')
+	else:
+		top_headlines = newsapi.get_top_headlines(q=keyword,
+		                                       category= categ,
+	                                          language='en',
+	                                          country =country)		
 
 	return top_headlines
 
 
-def search4(keyword, categ = 'business', from_par = '2020-12-18', to_par ='2020-12-28'):
+def search4(keyword, from_par = '2020-12-19', to_par ='2021-01-17'):
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
 	all_articles = newsapi.get_everything(q=keyword,
 	                                      #sources='bbc-news,the-verge',
-	                                      domains='bbc.co.uk,techcrunch.com',
+	                                     # domains='bbc.co.uk,techcrunch.com',
 	                                      from_param=from_par,
 	                                      to=to_par,
 	                                      language='en',
@@ -56,37 +81,28 @@ def search4(keyword, categ = 'business', from_par = '2020-12-18', to_par ='2020-
 
 	return all_articles
 
+def search5(keyword):
+	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
+
+	got = datetime.now() - timedelta(days =1)
+
+	all_articles = newsapi.get_everything(q=keyword,
+	                                      #sources='bbc-news,the-verge',
+	                                     # domains='bbc.co.uk,techcrunch.com',
+	                                      from_param=got.strftime('%Y-%m-%dT%H:%M:%S'),
+	                                      to=datetime.now().strftime('%Y-%m-%dT%H:%M:%S'),
+	                         
+	                                      language='en',
+	                                      sort_by='popularity',
+	                                      page=1)
+
+	return all_articles
+
 
 def main():
 
-	'''
-	# Init
-	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
-
-
-	# /v2/top-headlines
-	top_headlines = newsapi.get_top_headlines(q='bitcoin',
-	                                          #sources='bbc-news,the-verge',
-	                                          category='business',
-	                                          language='en',
-	                                          country='us')
-
-	# /v2/everything
-	all_articles = newsapi.get_everything(q='bitcoin',
-	                                      #sources='bbc-news,the-verge',
-	                                      domains='bbc.co.uk,techcrunch.com',
-	                                      from_param='2020-12-15',
-	                                      to='2020-12-24',
-	                                      language='en',
-	                                      sort_by='relevancy',
-	                                      page=2)
-
-	# /v2/sources
 	sources = newsapi.get_sources()
-	print(search("iPhone"))
 
-	pass
-	'''
 	print(search("Tesla"))
 	pass
 
