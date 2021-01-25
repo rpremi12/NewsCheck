@@ -3,6 +3,7 @@ import time
 from search import *
 import inspect
 import sys 
+import sentiment
 
 keyword = "Tesla"
 
@@ -11,7 +12,7 @@ def time_readout(name, time , res):
 
 class TestSearchMethods(unittest.TestCase):
 
-
+	'''
 	def test_no_category_search(self):
 		# get start time
 		start = time.time()
@@ -153,6 +154,40 @@ class TestSearchMethods(unittest.TestCase):
 		self.assertTrue(len(result)>0)
 		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)
 
+	'''
+
+
+	def test_sent_analysis_1(self):
+		# get start time
+		start = time.time()
+
+		# Do Method operations
+		result = sentiment.sentiment_score("This is unacceptable. Shame on you Nintendo.")
+
+		# calculate duration 
+		dur = time.time()-start
+		print(result)
+
+		# See if operation works
+		self.assertTrue(result<0)
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
+
+
+	def test_sent_analysis_2(self):
+		# get start time
+		start = time.time()
+
+		# Do Method operations
+		result = sentiment.sentiment_score_filtered("This is unacceptable. Shame on you Nintendo. ")
+
+		# calculate duration 
+		dur = time.time()-start
+
+		print(result)
+
+		# See if operation works
+		self.assertTrue(result<0)
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
 
 
 if __name__ == '__main__':
