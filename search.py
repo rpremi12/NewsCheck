@@ -1,5 +1,7 @@
 from newsapi import NewsApiClient
 from datetime import datetime, timedelta
+import bs4
+import requests
 
 
 def search(keyword, country = None):
@@ -99,9 +101,60 @@ def search5(keyword):
 	return all_articles
 
 
+
+
+
+def google_search(keyword):
+
+	# Make two strings with default google search URL 
+	# 'https://google.com/search?q=' and 
+	# our customized search keyword. 
+	# Concatenate them 
+	text= keyword
+	url = 'https://google.com/search?q=' + text 
+	  
+	# Fetch the URL data using requests.get(url), 
+	# store it in a variable, request_result. 
+	request_result=requests.get( url ) 
+	  
+	# Creating soup from the fetched request 
+	soup = bs4.BeautifulSoup(request_result.text, 
+	                         "html.parser") 
+	#print(soup) 
+	#print(soup.prettify())
+
+
+	heading_object=soup.find_all( 'span')
+
+	#<span class ="aCOpRe">
+
+	# Iterate through the object 
+	# and print it as a string. 
+	top_stories = []
+	top_stories_found = False
+	for info in heading_object: 
+		#print(top_stories_found)
+		if top_stories_found == False and info.getText().find("Top stories") !=-1:
+			top_stories_found= True
+			continue
+		elif top_stories_found == False:
+			continue
+		if top_stories_found == True and len(info.getText().strip().split(" ")) > 2:
+			#print(info.getText(),len(info.getText().split(" "))) 
+			#print("------") 
+			top_stories.append(info.getText())
+		elif top_stories_found == True:
+	
+			break
+
+	return top_stories
+
+
+
+
 def main():
 
-	sources = newsapi.get_sources()
+	#sources = newsapi.get_sources()
 
 	print(search("Tesla"))
 	pass

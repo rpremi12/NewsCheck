@@ -4,14 +4,14 @@ from search import *
 import inspect
 import sys 
 
-keyword = "COVID"
+keyword = "Tesla"
 
 def time_readout(name, time , res):
 	print(name,"| Elapsed time:", time, "| # of Articles:", res)
 
 class TestSearchMethods(unittest.TestCase):
 
-	
+
 	def test_no_category_search(self):
 		# get start time
 		start = time.time()
@@ -138,6 +138,21 @@ class TestSearchMethods(unittest.TestCase):
 		# See if operation works
 		self.assertEqual(result['status'], 'ok')
 		time_readout(inspect.stack()[0][0].f_code.co_name, dur, result['totalResults'])
+
+	def test_google_search(self):
+		# get start time
+		start = time.time()
+
+		# Do Method operations
+		result = google_search(keyword)
+
+		# calculate duration 
+		dur = time.time()-start
+
+		# See if operation works
+		self.assertTrue(len(result)>0)
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)
+
 
 
 if __name__ == '__main__':
