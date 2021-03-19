@@ -70,7 +70,7 @@ def search3(keyword, categ = 'business', country= None):
 	return top_headlines
 
 
-def search4(keyword, from_par = '2020-12-19', to_par ='2021-01-17'):
+def search4(keyword, from_par = '2021-02-19', to_par ='2021-03-16'):
 	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
 	all_articles = newsapi.get_everything(q=keyword,
 	                                      #sources='bbc-news,the-verge',
@@ -78,7 +78,7 @@ def search4(keyword, from_par = '2020-12-19', to_par ='2021-01-17'):
 	                                      from_param=from_par,
 	                                      to=to_par,
 	                                      language='en',
-	                                      sort_by='relevancy',
+	                                      sort_by='popularity',
 	                                      page=1)
 
 	return all_articles

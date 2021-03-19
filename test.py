@@ -11,7 +11,6 @@ def time_readout(name, time , res):
 	print(name,"| Elapsed time:", time, "| # of Articles:", res)
 
 class TestSearchMethods(unittest.TestCase):
-
 	'''
 	def test_no_category_search(self):
 		# get start time
@@ -154,15 +153,14 @@ class TestSearchMethods(unittest.TestCase):
 		self.assertTrue(len(result)>0)
 		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)
 
+
 	'''
-
-
 	def test_sent_analysis_1(self):
 		# get start time
 		start = time.time()
 
 		# Do Method operations
-		result = sentiment.sentiment_score("This is unacceptable. Shame on you Nintendo.")
+		result = sentiment.sentiment_score("They had the 'excuse' of lack of memory space with cartridges, but with the Switch, there is literally NO GOOD REASON to do that but CORPORATE GREED. That kind of practice shouldn't be allowed. Seriously, shame on you Nintendo!")
 
 		# calculate duration 
 		dur = time.time()-start
@@ -178,7 +176,7 @@ class TestSearchMethods(unittest.TestCase):
 		start = time.time()
 
 		# Do Method operations
-		result = sentiment.sentiment_score_filtered("This is unacceptable. Shame on you Nintendo. ")
+		result = sentiment.sentiment_score_filtered("They had the 'excuse' of lack of memory space with cartridges, but with the Switch, there is literally NO GOOD REASON to do that but CORPORATE GREED. That kind of practice shouldn't be allowed. Seriously, shame on you Nintendo!")
 
 		# calculate duration 
 		dur = time.time()-start
@@ -188,6 +186,60 @@ class TestSearchMethods(unittest.TestCase):
 		# See if operation works
 		self.assertTrue(result<0)
 		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
+
+
+
+	def test_sent_analysis_3(self):
+		# get start time
+		start = time.time()
+
+		# Do Method operations
+		result = sentiment.sentiment_score_sentence("They had the 'excuse' of lack of memory space with cartridges, but with the Switch, there is literally NO GOOD REASON to do that but CORPORATE GREED. That kind of practice shouldn't be allowed. Seriously, shame on you Nintendo!")
+
+		# calculate duration 
+		dur = time.time()-start
+
+		print(result)
+
+		# See if operation works
+		self.assertTrue(result<0)
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
+
+
+	def test_sent_analysis_4(self):
+		# get start time
+		start = time.time()
+
+		# Do Method operations
+		result = sentiment.sent_score("They had the 'excuse' of lack of memory space with cartridges, but with the Switch, there is literally NO GOOD REASON to do that but CORPORATE GREED. That kind of practice shouldn't be allowed. Seriously, shame on you Nintendo!")
+		
+		# calculate duration 
+		dur = time.time()-start
+
+		print(result)
+		#result = result["mean_compound"]-1 
+
+		# See if operation works
+		self.assertTrue(result=="neg")
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
+
+	def test_sent_analysis_5(self):
+		# get start time
+		start = time.time()
+
+		# Do Method operations
+		result = sentiment.sent_score("This is the best game I have ever played! It is amazing!")
+		
+		# calculate duration 
+		dur = time.time()-start
+
+		print(result)
+		#result = result["mean_compound"]-1 
+
+		# See if operation works
+		self.assertTrue(result=="neg")
+		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
+
 
 
 if __name__ == '__main__':
