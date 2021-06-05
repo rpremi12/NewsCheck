@@ -83,6 +83,8 @@ class Navbar extends Component {
                 <i className="mdi mdi-view-grid"></i>
               </a>
             </li>
+
+            {/*
             <Dropdown alignRight as="li" className="nav-item border-left" >
               <Dropdown.Toggle as="a" className="nav-link count-indicator cursor-pointer">
                 <i className="mdi mdi-email"></i>
@@ -130,6 +132,7 @@ class Navbar extends Component {
                   <p className="p-3 mb-0 text-center">4 <Trans>new messages</Trans></p>
                 </Dropdown.Menu>
             </Dropdown>
+
             <Dropdown alignRight as="li" className="nav-item border-left">
               <Dropdown.Toggle as="a" className="nav-link count-indicator cursor-pointer">
                 <i className="mdi mdi-bell"></i>
@@ -183,10 +186,16 @@ class Navbar extends Component {
                 <p className="p-3 mb-0 text-center"><Trans>See all notifications</Trans></p>
               </Dropdown.Menu>
             </Dropdown>
+
+          */}
+
+
+
+
             <Dropdown alignRight as="li" className="nav-item">
               <Dropdown.Toggle as="a" className="nav-link cursor-pointer no-caret">
                 <div className="navbar-profile">
-                  <img className="img-xs rounded-circle" src={require('../../assets/images/faces/face15.jpg')} alt="profile" />
+                  <img className="img-xs rounded-circle" src={require('../../assets/images/NewsCheckLogo100.png')} alt="profile" />
                   <p className="mb-0 d-none d-sm-block navbar-profile-name"><Trans>NewsCheck</Trans></p>
                   <i className="mdi mdi-menu-down d-none d-sm-block"></i>
                 </div>

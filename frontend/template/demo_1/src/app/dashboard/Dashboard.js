@@ -20,7 +20,7 @@ export class Dashboard extends Component {
     datasets: [{
         data: [55, 25, 20],
         backgroundColor: [
-          "#111111","#00d25b","#ffab00"
+          "#FC424A","#00d25b","#ffab00"
         ]
       }
     ]
@@ -88,7 +88,7 @@ export class Dashboard extends Component {
             </div>
           </div>
         </div>*/}
-        
+
         <div className="row">
           <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div className="card">

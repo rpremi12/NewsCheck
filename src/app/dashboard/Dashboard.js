@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import Slider from "react-slick";
 import { TodoListComponent } from '../apps/TodoList'
 import { VectorMap } from "react-jvectormap"
 
+import axios from 'axios'
 const mapData = {
   "BZ": 75.00,
   "US": 56.25,
@@ -13,14 +14,77 @@ const mapData = {
   "GE": 33.25
 }
 
+
 export class Dashboard extends Component {
 
+  constructor(props){
+    super(props);
+    this.state ={
+      name:"R"
+    };
+  }
+/*
+ useEffect()  {
+
+   this.setState( prevState=> ( { fetch('/simple_chart').then(res=>res.json()).then(data=>{
+                        name = data.name
+           })
+    }))
+ }*/
+ /*
+  componentDidMount() {
+    this.getData();
+  }*/
+
+  getData(){
+    var apiRes =null;
+    try{
+    axios.get("http://localhost:5000/simple_chart").then(res =>{
+      const name1 = res.data.name
+      //console.log(name1)
+      apiRes = name1;
+      this.setState({
+        name:name1
+      })
+
+    })
+  }
+  catch(err){
+    apiRes=err.response
+  }
+  finally{
+    console.log(apiRes)
+  }
+
+  }
+
+/*
+componentWillUnmount() {
+        clearInterval(this.timer);
+        this.timer = null;
+    }*/
+
+/*
+async fetchUsersAsync() {
+
+  const [data, setData] = useState(0)
+        try {
+            this.setState({...this.state, isFetching: true});
+            const response = await axios.get('/simple_chart');
+            this.setState({users: response.data, isFetching: false});
+        } catch (e) {
+            console.log(e);
+            this.setState({...this.state, isFetching: false});
+        }
+    };
+fetchUsers = this.fetchUsersAsync;*/
+       
   transactionHistoryData =  {
-    labels: ["Paypal", "Stripe","Cash"],
+    labels: ["Negative", "Positive","Neutral"],
     datasets: [{
         data: [55, 25, 20],
         backgroundColor: [
-          "#111111","#00d25b","#ffab00"
+          "#FC424A","#00d25b","#ffab00"
         ]
       }
     ]
@@ -50,6 +114,7 @@ export class Dashboard extends Component {
     slidesToShow: 1,
     slidesToScroll: 1
   }
+
   toggleProBanner() {
     document.querySelector('.proBanner').classList.toggle("hide");
   }
@@ -89,6 +154,7 @@ export class Dashboard extends Component {
           </div>
         </div>*/}
         
+        {/*
         <div className="row">
           <div className="col-xl-3 col-sm-6 grid-margin stretch-card">
             <div className="card">
@@ -171,15 +237,21 @@ export class Dashboard extends Component {
             </div>
           </div>
         </div>
+      */}
+
+
+
+
         <div className="row">
           <div className="col-md-4 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title">Transaction History</h4>
+                <h4 className="card-title"  >Today's Sentiment {this.state.name} </h4>
+                <button onClick={()=>this.getData()}></button>
                 <div className="aligner-wrapper">
                   <Doughnut data={this.transactionHistoryData} options={this.transactionHistoryOptions} />
                   <div className="absolute center-content">
-                    <h5 className="font-weight-normal text-whiite text-center mb-2 text-white">1200</h5>
+                    <h5 className="font-weight-normal text-whiite text-center mb-2 text-white">100</h5>
                     <p className="text-small text-muted text-center mb-0">Total</p>
                   </div>
                 </div>  
