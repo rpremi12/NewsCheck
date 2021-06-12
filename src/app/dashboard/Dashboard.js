@@ -20,9 +20,23 @@ export class Dashboard extends Component {
   constructor(props){
     super(props);
     this.state ={
-      name:"R"
-    };
+      name:"",
+      transactionHistoryData : {
+    labels: ["Negative", "Positive","Neutral"],
+    datasets: [{
+        data: [55, 25, 20],
+        backgroundColor: [
+          "#FC424A","#00d25b","#ffab00"
+        ]
+      }
+    ]
   }
+
+    };
+
+      //this.onToggleLoop = this.onToggleLoop.bind(this);
+  }
+
 /*
  useEffect()  {
 
@@ -35,16 +49,43 @@ export class Dashboard extends Component {
   componentDidMount() {
     this.getData();
   }*/
+  testfunc(){
+    var value = document.getElementsByName("search")[0].value;
+    console.log(value)
+    try{
+    this.setState({
+      name:"Today's Sentiment for "+value,
+      transactionHistoryData:{
+      labels: [value, "Positive","Neutral"],
+      datasets: [{
+          data: [55, 25, 20],
+          backgroundColor: [
+            "#FC424A","#00d25b","#ffab00"
+          ]
+        }
+      ]
+    }
+    })
+  }
+  catch(err){
+    console.log("didn't work")
+  }
+  //  this.transactionHistoryData['labels'] = [value, "Positive","Neutral"]
+  }
 
   getData(){
     var apiRes =null;
+    var value = document.getElementsByName("search")[0].value;
+
     try{
-    axios.get("http://localhost:5000/simple_chart").then(res =>{
+    axios.get("http://localhost:5000/get_day?q="+value).then(res =>{
       const name1 = res.data.name
       //console.log(name1)
       apiRes = name1;
       this.setState({
-        name:name1
+        name:"Today's Sentiment for "+value,
+        transactionHistoryData:res.data.day_data
+
       })
 
     })
@@ -238,7 +279,29 @@ fetchUsers = this.fetchUsersAsync;*/
           </div>
         </div>
       */}
+      <nav className="navbar p-0 fixed-top d-flex flex-row">
 
+      <div className="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+
+      <div className="row">
+          <ul className="navbar-nav w-100">
+            <li className="nav-item w-100">
+              <div className="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                <input name='search' type="text" className="form-control" placeholder="" />
+                              <button type="button" onClick={()=>this.getData()} className="btn btn-light btn-fw">Search</button>
+
+              </div>
+
+            </li>
+            
+
+
+          </ul>
+
+        </div></div>
+           <ul className="navbar-nav navbar-nav-right">
+           </ul>
+        </nav>
 
 
 
@@ -246,33 +309,33 @@ fetchUsers = this.fetchUsersAsync;*/
           <div className="col-md-4 grid-margin stretch-card">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title"  >Today's Sentiment {this.state.name} </h4>
-                <button onClick={()=>this.getData()}></button>
+                <h4 className="card-title"  >{this.state.name}  </h4>
+    
                 <div className="aligner-wrapper">
-                  <Doughnut data={this.transactionHistoryData} options={this.transactionHistoryOptions} />
+                  <Doughnut redraw={true} data={this.state.transactionHistoryData} options={this.transactionHistoryOptions} />
                   <div className="absolute center-content">
                     <h5 className="font-weight-normal text-whiite text-center mb-2 text-white">100</h5>
                     <p className="text-small text-muted text-center mb-0">Total</p>
                   </div>
                 </div>  
-                <div className="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
+
+                      <div className="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
                   <div className="text-md-center text-xl-left">
-                    <h6 className="mb-1">Transfer to Paypal</h6>
-                    <p className="text-muted mb-0">07 Jan 2019, 09:12AM</p>
+                    <h6 className="mb-1">Negative</h6>
+                     <h6 className="mb-1">Neutral</h6>
+                    <h6 className="mb-1">Positive</h6>
+
+                   {/* <p className="text-muted mb-0">07 Jan 2019, 09:12AM</p> */}
                   </div>
                   <div className="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                    <h6 className="font-weight-bold mb-0">$236</h6>
+                    <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][0]}%</h6>
+                    <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][1]}%</h6>
+                    <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][2]}%</h6>
+
                   </div>
                 </div>
-                <div className="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                  <div className="text-md-center text-xl-left">
-                    <h6 className="mb-1">Tranfer to Stripe</h6>
-                    <p className="text-muted mb-0">07 Jan 2019, 09:12AM</p>
-                  </div>
-                  <div className="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
-                    <h6 className="font-weight-bold mb-0">$593</h6>
-                  </div>
-                </div>
+
+
               </div>
             </div>
           </div>
@@ -437,6 +500,8 @@ fetchUsers = this.fetchUsersAsync;*/
             </div>
           </div>
         </div>
+
+        {/*
         <div className="row ">
           <div className="col-12 grid-margin">
             <div className="card">
@@ -709,6 +774,7 @@ fetchUsers = this.fetchUsersAsync;*/
             </div>
           </div>
         </div>
+      */}
         <div className="row">
           <div className="col-12">
             <div className="card">
