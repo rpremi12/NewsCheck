@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Line,Doughnut } from 'react-chartjs-2';
 import Slider from "react-slick";
 import { TodoListComponent } from '../apps/TodoList'
 import { VectorMap } from "react-jvectormap"
@@ -16,11 +16,15 @@ const mapData = {
 
 
 export class Dashboard extends Component {
-
+   
   constructor(props){
     super(props);
     this.state ={
       name:"",
+      wname:"",
+      wscorel:"N/a",
+      wscoreh:"N/a",
+      dscore:"N/a",
       transactionHistoryData : {
     labels: ["Negative", "Positive","Neutral"],
     datasets: [{
@@ -30,21 +34,89 @@ export class Dashboard extends Component {
         ]
       }
     ]
-  }
+  },
+   wdata:{
 
-    };
+        labels: ['2021-06-06', '2021-06-07', '2021-06-08', '2021-06-09', '2021-06-10', '2021-06-11', '2021-06-12'],
+        datasets: [{
+          label: '% Positive',
+          data: [42.5, 10.0, 30.0, 30.0, 35.0, 22.5, 40.0],
+          pointRadius: 6,
+          backgroundColor: 
+            'rgba(0, 210, 91,0.4)',
+          
+          borderColor: 
+            'rgba(0, 210, 91,0.8)',
+          
+          borderWidth: 5,
+          fill:true
+        },
+        {
+          label: '% Neutral',
+          data: [72.5, 62.5, 80.0, 67.5, 72.5, 62.5, 80.0],
+                    pointRadius: 6,
+          backgroundColor: 
+            'rgba(255, 171, 0,0.4)',
+          
+          borderColor: 
+            'rgb(255, 171, 0,0.8)',
+          
+          borderWidth: 5,
+          fill:true
+        },
+        {
+          label: '% Negative',
+          data: [100,100,100,100,100,100,100],
+                    pointRadius: 4,
+
+          backgroundColor: 
+            'rgb(252, 66, 74,0.2)',
+          
+          borderColor: 
+            'rgb(252, 66, 74,0.8)',
+          
+          borderWidth: 5,
+          fill:true
+        }]
+    }
+
 
       //this.onToggleLoop = this.onToggleLoop.bind(this);
-  }
+  }}
 
-/*
- useEffect()  {
 
-   this.setState( prevState=> ( { fetch('/simple_chart').then(res=>res.json()).then(data=>{
-                        name = data.name
-           })
-    }))
- }*/
+   
+
+    options = {
+          responsive: true,
+
+      scales: {
+        y:{
+          stacked:true
+        },
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          },
+          gridLines: {
+            color:"rgba(204, 204, 204,0.1)"
+          }
+        }],
+        xAxes: [{
+          gridLines: {
+            color: "rgba(204, 204, 204,0.1)"
+          }
+        }]
+      },
+      legend: {
+        display: false
+      },
+      elements: {
+        point: {
+          radius: 0
+        }
+      }
+    };
  /*
   componentDidMount() {
     this.getData();
@@ -54,7 +126,7 @@ export class Dashboard extends Component {
     console.log(value)
     try{
     this.setState({
-      name:"Today's Sentiment for "+value,
+      name:'Today\'s Sentiment for \"'+value+'\"',
       transactionHistoryData:{
       labels: [value, "Positive","Neutral"],
       datasets: [{
@@ -83,8 +155,13 @@ export class Dashboard extends Component {
       //console.log(name1)
       apiRes = name1;
       this.setState({
-        name:"Today's Sentiment for "+value,
-        transactionHistoryData:res.data.day_data
+        name:'Today\'s Sentiment for \"'+value+'\"',
+        wname:"This Week's Sentiment for \""+value+'\"',
+        wscoreh:res.data.maxscore,
+        wscorel:res.data.minscore,
+        wdata:res.data.wdata,
+        transactionHistoryData:res.data.day_data,
+        dscore:res.data.dscore
 
       })
 
@@ -314,8 +391,8 @@ fetchUsers = this.fetchUsersAsync;*/
                 <div className="aligner-wrapper">
                   <Doughnut redraw={true} data={this.state.transactionHistoryData} options={this.transactionHistoryOptions} />
                   <div className="absolute center-content">
-                    <h5 className="font-weight-normal text-whiite text-center mb-2 text-white">100</h5>
-                    <p className="text-small text-muted text-center mb-0">Total</p>
+                    <h5 className="font-weight-normal text-whiite text-center mb-2 text-white">{this.state.dscore}</h5>
+                    <p className="text-small text-muted text-center mb-0">/100</p>
                   </div>
                 </div>  
 
@@ -329,8 +406,8 @@ fetchUsers = this.fetchUsersAsync;*/
                   </div>
                   <div className="align-self-center flex-grow text-right text-md-center text-xl-right py-md-2 py-xl-0">
                     <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][0]}%</h6>
-                    <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][1]}%</h6>
                     <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][2]}%</h6>
+                    <h6 className="font-weight-bold mb-0">{this.state.transactionHistoryData['datasets'][0]['data'][1]}%</h6>
 
                   </div>
                 </div>
@@ -343,10 +420,13 @@ fetchUsers = this.fetchUsersAsync;*/
             <div className="card">
               <div className="card-body">
                 <div className="d-flex flex-row justify-content-between">
-                  <h4 className="card-title mb-1">Open Projects</h4>
-                  <p className="text-muted mb-1">Your data status</p>
+                  <h4 className="card-title mb-1">{this.state.wname} </h4>
+                  <p className="text-muted mb-1"></p>
                 </div>
                 <div className="row">
+
+<Line data={this.state.wdata} options={this.options} width="450%"/>
+                {/*
                   <div className="col-12">
                     <div className="preview-list">
                       <div className="preview-item border-bottom">
@@ -435,7 +515,7 @@ fetchUsers = this.fetchUsersAsync;*/
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>
@@ -445,14 +525,15 @@ fetchUsers = this.fetchUsersAsync;*/
           <div className="col-sm-4 grid-margin">
             <div className="card">
               <div className="card-body">
-                <h5>Revenue</h5>
+                <h5>Today's Score</h5>
                 <div className="row">
                   <div className="col-8 col-sm-12 col-xl-8 my-auto">
                     <div className="d-flex d-sm-block d-md-flex align-items-center">
-                      <h2 className="mb-0">$32123</h2>
-                      <p className="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                      <h2 className="mb-0">{this.state.dscore}</h2>
+                        
+                       <p className="text-success ml-2 mb-0 font-weight-medium">/100</p>
                     </div>
-                    <h6 className="text-muted font-weight-normal">11.38% Since last month</h6>
+                   {/* <h6 className="text-muted font-weight-normal">11.38% Since last month</h6>*/}
                   </div>
                   <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
                     <i className="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
@@ -464,17 +545,19 @@ fetchUsers = this.fetchUsersAsync;*/
           <div className="col-sm-4 grid-margin">
             <div className="card">
               <div className="card-body">
-                <h5>Sales</h5>
+                <h5>Highest Score of the Week</h5>
+
                 <div className="row">
                   <div className="col-8 col-sm-12 col-xl-8 my-auto">
                     <div className="d-flex d-sm-block d-md-flex align-items-center">
-                      <h2 className="mb-0">$45850</h2>
-                      <p className="text-success ml-2 mb-0 font-weight-medium">+8.3%</p>
+                      <h2 className="mb-0">{this.state.wscoreh}</h2>
+                       <p className="text-success ml-2 mb-0 font-weight-medium">/100</p>
                     </div>
-                    <h6 className="text-muted font-weight-normal"> 9.61% Since last month</h6>
+                    <h6 className="text-muted font-weight-normal"></h6>
                   </div>
                   <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                    <i className="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
+                                      <i className="icon-lg mdi mdi-monitor text-success ml-auto"></i>
+
                   </div>
                 </div>
               </div>
@@ -483,17 +566,18 @@ fetchUsers = this.fetchUsersAsync;*/
           <div className="col-sm-4 grid-margin">
             <div className="card">
               <div className="card-body">
-                <h5>Purchase</h5>
+                <h5>Lowest Score of the Week</h5>
                 <div className="row">
                   <div className="col-8 col-sm-12 col-xl-8 my-auto">
                     <div className="d-flex d-sm-block d-md-flex align-items-center">
-                      <h2 className="mb-0">$2039</h2>
-                      <p className="text-danger ml-2 mb-0 font-weight-medium">-2.1% </p>
+                      <h2 className="mb-0">{this.state.wscorel}</h2>
+                      <p className="text-danger ml-2 mb-0 font-weight-medium">/100</p>
                     </div>
-                    <h6 className="text-muted font-weight-normal">2.27% Since last month</h6>
+                    <h6 className="text-muted font-weight-normal"></h6>
                   </div>
                   <div className="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                    <i className="icon-lg mdi mdi-monitor text-success ml-auto"></i>
+                                      <i className="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
+
                   </div>
                 </div>
               </div>
@@ -779,7 +863,7 @@ fetchUsers = this.fetchUsersAsync;*/
           <div className="col-12">
             <div className="card">
               <div className="card-body">
-                <h4 className="card-title">Visitors by Countries</h4>
+                <h4 className="card-title">Articles by Countries</h4>
                 <div className="row">
                   <div className="col-md-5">
                     <div className="table-responsive">

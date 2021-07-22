@@ -10,8 +10,8 @@ from pandas import Series, DataFrame
 import matplotlib.pyplot as plt
 import json
 
-def formatdata():
-	pass
+def formatdata(score):
+	return (score+1)/2
 
 def getInput():
 	timeframe = "d"
@@ -115,9 +115,142 @@ def get_day(keyword):
 
 	'''
 
+def get_week(keyword):
+	neg_articles =[]
+	neu_articles =[]
+	pos_articles =[]
+	days = []
+	scores = []
+
+	for day in range(7):				
+		curr_day = (datetime.now()- timedelta(days=6-day)).strftime('%Y-%m-%dT%H:%M:%S')
+		days.append((datetime.now()- timedelta(days=6-day)).strftime('%Y-%m-%d'))
+
+		prev_day =( datetime.now() - timedelta(days=7-day)).strftime('%Y-%m-%dT%H:%M:%S')
+		curr_week =( datetime.now() - timedelta(days=13-day)).strftime('%Y-%m-%dT%H:%M:%S')
+		articles = search4(keyword, prev_day, curr_day )
+		#print(articles)
+		
+		
+		totalArticles = articles["totalResults"]
+
+		if totalArticles >= 20:
+			totalArticles = 20
+		elif totalArticles ==0:
+			print("no results found")
+			continue
+
+		articles = articles['articles'][:totalArticles]
+		total_score_body = []
+		total_score_title = []
+		total_both = []
+
+
+		for art in articles:
+			total_score_title.append(sentiment_score_filtered(art['title']))
+			if art['content'] != None:
+				total_score_body.append(sentiment_score_filtered(art['content']))
+			else:
+				total_score_body.append(0.0)
+
+		total_both = list(total_score_body)
+		total_both.extend(total_score_title)
+
+
+
+		neg_articles.append(format2(totalArticles*2, len([ x for x in total_both if x < 0])))
+		neu_articles.append(format2(totalArticles*2, len([ x for x in total_both if x== 0])))
+		pos_articles.append(format2(totalArticles*2, len([ x for x in total_both if x > 0])))
+		mboth = round(mean(map(formatdata,total_both)),2)*100
+		scores.append(round(mboth))
+		
+
+
+#	print(articles)
+	#print(days)
+	print("Scores of the week", scores)
+	print(days)
+	print(pos_articles)
+	print(neu_articles)
+	print(neg_articles)
+	#print("Overall Score:", mean(total_both))
+
+	calc2 = [ pos_articles[x] + neu_articles[x]  for x in range(7)]
+	calc3 = [ pos_articles[x] + neu_articles[x] + neg_articles[x] for x in range(7)]
+	print(calc2)
+	#print(calc3)
+	'''
+
+	plt.bar(range(len(neg_articles)), neg_articles, tick_label=days)
+	plt.bar(range(len(neu_articles)), neu_articles, bottom=neg_articles, tick_label=days)
+	plt.bar(range(len(pos_articles)), pos_articles, bottom=calc2, tick_label=days)
+	plt.legend(labels=['Negative','Neutral','Positive'])
+	plt.xlabel("Analysis for found articles")
+	plt.ylabel("% of total articles/headlines of a given sentiment")
+	plt.title(str(days[6]) + " Past Week sentiment analysis for '"+keyword+"'")
+	plt.show()
+
+	'''
+
+	response = {
+	'maxscore': max(scores),
+	'minscore': min(scores),
+	'wscores': scores,
+	'wdata': {
+
+        'labels': days,
+        'datasets': [{
+          'label': '% Positive',
+          'data': pos_articles,
+          'pointRadius': 4,
+          'backgroundColor': 
+            'rgba(0, 210, 91,0.4)',
+          
+          'borderColor': 
+            'rgba(0, 210, 91,0.8)',
+          
+          'borderWidth': 5,
+          'fill':True
+        },
+        {
+          'label': '% Neutral',
+          'data': calc2,
+           'pointRadius': 4,
+          'backgroundColor': 
+            'rgba(255, 171, 0,0.4)',
+          
+          'borderColor': 
+            'rgb(255, 171, 0,0.8)',
+          
+          'borderWidth': 5,
+          'fill':True
+        },
+        {
+          'label': '% Negative',
+          'data': [100,100,100,100,100,100,100],
+           'pointRadius': 4,
+
+          'backgroundColor': 
+            'rgb(252, 66, 74,0.2)',
+          
+          'borderColor': 
+            'rgb(252, 66, 74,0.8)',
+          
+          'borderWidth': 5,
+          'fill':True
+        }]
+    }}
+    print(response)
+    return response
+
+
+
 def main():
 
 	print("News Check 0.05:\n")
+	get_week("harris")
+
+	'''
 
 	while True:
 		timeframe, keyword = getInput()
@@ -192,7 +325,7 @@ def main():
 			plt.show()
 		
 
-
+	'''
 
 
 

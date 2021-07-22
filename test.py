@@ -11,7 +11,7 @@ def time_readout(name, time , res):
 	print(name,"| Elapsed time:", time, "| # of Articles:", res)
 
 class TestSearchMethods(unittest.TestCase):
-	'''
+	
 	def test_no_category_search(self):
 		# get start time
 		start = time.time()
@@ -239,7 +239,7 @@ class TestSearchMethods(unittest.TestCase):
 		# See if operation works
 		self.assertTrue(result=="neg")
 		time_readout(inspect.stack()[0][0].f_code.co_name, dur, -1)		
-
+	'''
 
 
 if __name__ == '__main__':

@@ -71,7 +71,9 @@ def search3(keyword, categ = 'business', country= None):
 
 
 def search4(keyword, from_par = '2021-02-19', to_par ='2021-03-16'):
-	newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505')
+	#newsapi = NewsApiClient(api_key='ff1a3afb8cfd49de8cec580041662505') 
+	
+	newsapi = NewsApiClient(api_key='25d95a18389841d4ba1b65300ed73b17') 
 	all_articles = newsapi.get_everything(q=keyword,
 	                                      #sources='bbc-news,the-verge',
 	                                     # domains='bbc.co.uk,techcrunch.com',
